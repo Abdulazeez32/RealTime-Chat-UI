@@ -1,0 +1,1114 @@
+import React, { useState } from "react";
+import {
+  Avatar,
+  Badge,
+  IconButton,
+  Button,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import FiberManualRecordRoundedIcon from "@mui/icons-material/FiberManualRecordRounded";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import ChatBubbleRoundedIcon from "@mui/icons-material/ChatBubbleRounded";
+import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
+import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRounded";
+import ImageRoundedIcon from "@mui/icons-material/ImageRounded";
+import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
+import MicRoundedIcon from "@mui/icons-material/MicRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
+import VideocamRoundedIcon from "@mui/icons-material/VideocamRounded";
+
+export default function BentoDashboard() {
+  const [status, setStatus] = useState("Online");
+  const [statusAnchor, setStatusAnchor] = useState(null);
+
+  const user = {
+    name: "Alex Morgan",
+    tag: "alex.dev",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250",
+    bio: "Building real-time web experiences.",
+  };
+
+  const pinnedContacts = [
+    { id: 1, name: "Sarah J.", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150", online: true, unread: 2 },
+    { id: 2, name: "David C.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150", online: true, unread: 0 },
+    { id: 3, name: "Elena R.", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=150", online: false, unread: 0 },
+    { id: 4, name: "Marcus V.", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150", online: true, unread: 1 },
+    { id: 5, name: "Kavita M.", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150", online: true, unread: 0 },
+  ];
+
+  const recentMedia = [
+    { id: 1, type: "file", title: "AppArchitecture_v3.pdf", size: "2.4 MB", time: "12:30 PM", icon: <InsertDriveFileRoundedIcon sx={{ color: "#7c3aed" }} /> },
+    { id: 2, type: "image", title: "DashboardMockup_dark.png", size: "4.1 MB", time: "11:15 AM", icon: <ImageRoundedIcon sx={{ color: "#9333ea" }} /> },
+    { id: 3, type: "link", title: "github.com/org/pulse-core", size: "Shared Link", time: "09:40 AM", icon: <LinkRoundedIcon sx={{ color: "#c026d3" }} /> },
+  ];
+
+  const activeGroups = [
+    { id: 1, name: "Core Architecture", members: 14, unread: 6, tag: "Tech" },
+    { id: 2, name: "Product & UI Designers", members: 28, unread: 0, tag: "Design" },
+    { id: 3, name: "Release Announcement", members: 142, unread: 1, tag: "Public" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#f5f3ff] p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6 font-sans">
+
+      {/* =================================================
+          ROW 1: BENTO HEADER & IDENTITY BAR
+          ================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        {/* User Identity Pill (4 Cols) */}
+        <div className="lg:col-span-5 bg-white rounded-3xl p-5 border border-violet-100 shadow-[0_8px_30px_rgba(124,58,237,0.04)] flex items-center justify-between">
+          <div className="flex items-center gap-3.5">
+            <Badge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+              sx={{
+                "& .MuiBadge-badge": {
+                  bgcolor: status === "Online" ? "#10b981" : status === "Busy" ? "#ef4444" : "#f59e0b",
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  border: "2px solid #ffffff",
+                },
+              }}
+            >
+              <Avatar src={user.avatar} sx={{ width: 54, height: 54, border: "2px solid #7c3aed" }} />
+            </Badge>
+
+            <div>
+              <h2 className="text-base font-black text-[#27213a] leading-tight">{user.name}</h2>
+              <p className="text-xs text-[#7c738f] font-mono">@{user.tag}</p>
+            </div>
+          </div>
+
+          <button
+            onClick={(e) => setStatusAnchor(e.currentTarget)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#7c3aed] bg-violet-50 border border-violet-100 hover:bg-violet-100 transition-colors"
+          >
+            <FiberManualRecordRoundedIcon
+              sx={{
+                fontSize: 10,
+                color: status === "Online" ? "#10b981" : status === "Busy" ? "#ef4444" : "#f59e0b",
+              }}
+            />
+            <span>{status}</span>
+            <KeyboardArrowDownRoundedIcon sx={{ fontSize: 16 }} />
+          </button>
+
+          <Menu
+            anchorEl={statusAnchor}
+            open={Boolean(statusAnchor)}
+            onClose={() => setStatusAnchor(null)}
+            PaperProps={{ sx: { borderRadius: "14px", mt: 1, minWidth: 130 } }}
+          >
+            <MenuItem onClick={() => { setStatus("Online"); setStatusAnchor(null); }} className="text-xs font-bold">🟢 Online</MenuItem>
+            <MenuItem onClick={() => { setStatus("Busy"); setStatusAnchor(null); }} className="text-xs font-bold">🔴 Busy</MenuItem>
+            <MenuItem onClick={() => { setStatus("Away"); setStatusAnchor(null); }} className="text-xs font-bold">🟡 Away</MenuItem>
+          </Menu>
+        </div>
+
+        {/* Global Fast Search Bar (7 Cols) */}
+        <div className="lg:col-span-7 bg-white rounded-3xl p-3 border border-violet-100 shadow-[0_8px_30px_rgba(124,58,237,0.04)] flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 px-3 flex-1">
+            <SearchRoundedIcon sx={{ color: "#a8a0b4", fontSize: 22 }} />
+            <input
+              type="text"
+              placeholder="Search conversations, files, media links, and members..."
+              className="w-full bg-transparent text-xs text-[#27213a] outline-none placeholder-[#aaa3b5]"
+            />
+          </div>
+
+          <Button
+            variant="contained"
+            startIcon={<AddRoundedIcon />}
+            sx={{
+              height: "44px",
+              px: 3,
+              borderRadius: "14px",
+              textTransform: "none",
+              fontWeight: 700,
+              fontSize: "0.82rem",
+              background: "linear-gradient(135deg, #7c3aed, #9333ea)",
+              boxShadow: "0 4px 14px rgba(124,58,237,0.2)",
+              "&:hover": { background: "linear-gradient(135deg, #6d28d9, #7e22ce)" },
+            }}
+          >
+            New Chat
+          </Button>
+        </div>
+      </div>
+
+      {/* =================================================
+          ROW 2: PINNED DIRECT MESSAGES (HORIZONTAL AVATAR SCROLLER)
+          ================================================= */}
+      <div className="bg-white rounded-3xl p-5 border border-violet-100 shadow-[0_8px_30px_rgba(124,58,237,0.04)] space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs font-black text-[#27213a] uppercase tracking-wider">Quick Direct Messages</span>
+          <span className="text-xs font-bold text-[#7c3aed] cursor-pointer hover:underline">View All</span>
+        </div>
+
+        <div className="flex items-center gap-6 overflow-x-auto pb-2 pt-1 no-scrollbar">
+          {pinnedContacts.map((contact) => (
+            <div key={contact.id} className="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer group">
+              <div className="relative">
+                <Badge
+                  badgeContent={contact.unread}
+                  color="error"
+                  overlap="circular"
+                  sx={{ "& .MuiBadge-badge": { fontSize: "10px", height: 18, minWidth: 18 } }}
+                >
+                  <Avatar
+                    src={contact.avatar}
+                    sx={{
+                      width: 56,
+                      height: 56,
+                      border: "2px solid #ede9fe",
+                      transition: "transform 0.2s ease, border-color 0.2s ease",
+                      "&.MuiAvatar-root:hover": { borderColor: "#7c3aed", transform: "scale(1.05)" },
+                    }}
+                  />
+                </Badge>
+                {contact.online && (
+                  <span className="w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full absolute bottom-0 right-0" />
+                )}
+              </div>
+              <span className="text-xs font-bold text-[#27213a] group-hover:text-[#7c3aed] transition-colors">
+                {contact.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* =================================================
+          ROW 3: BENTO GRID (ACTIVE ROOMS, LIVE CALL WIDGET, RECENT ASSETS)
+          ================================================= */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+        
+        {/* BENTO BOX 1: ACTIVE CHANNELS (5 Cols) */}
+        <div className="md:col-span-5 bg-white rounded-3xl p-5 border border-violet-100 shadow-[0_8px_30px_rgba(124,58,237,0.04)] flex flex-col justify-between space-y-4">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <GroupsRoundedIcon sx={{ color: "#7c3aed", fontSize: 20 }} />
+                <h3 className="text-xs font-black text-[#27213a] uppercase tracking-wider">Group Channels</h3>
+              </div>
+              <IconButton size="small"><MoreHorizRoundedIcon fontSize="small" /></IconButton>
+            </div>
+
+            <div className="space-y-2">
+              {activeGroups.map((grp) => (
+                <div
+                  key={grp.id}
+                  className="p-3 rounded-2xl bg-[#faf9ff] border border-violet-50 flex items-center justify-between hover:border-violet-200 transition-colors cursor-pointer"
+                >
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-[#27213a]">{grp.name}</span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-white text-[#7c738f] border border-violet-100">
+                        {grp.tag}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#7c738f]">{grp.members} members joined</p>
+                  </div>
+
+                  {grp.unread > 0 ? (
+                    <span className="w-5 h-5 bg-[#7c3aed] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {grp.unread}
+                    </span>
+                  ) : (
+                    <ArrowForwardRoundedIcon sx={{ fontSize: 14, color: "#aaa3b5" }} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            sx={{
+              height: "40px",
+              borderRadius: "12px",
+              borderColor: "#ddd6fe",
+              color: "#6d28d9",
+              fontWeight: 700,
+              textTransform: "none",
+              fontSize: "0.8rem",
+              "&:hover": { borderColor: "#a78bfa", bgcolor: "#faf9ff" },
+            }}
+          >
+            Explore Channels
+          </Button>
+        </div>
+
+        {/* BENTO BOX 2: ONGOING CALL & VOICE STATUS (3 Cols) */}
+        <div className="md:col-span-3 bg-gradient-to-br from-[#6d28d9] via-[#7c3aed] to-[#9333ea] text-white rounded-3xl p-5 shadow-[0_8px_30px_rgba(124,58,237,0.15)] flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest bg-white/20 px-2.5 py-1 rounded-full backdrop-blur-md">
+                Voice Room
+              </span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            </div>
+
+            <div className="my-6 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-white/15 border border-white/20 mx-auto flex items-center justify-center text-white mb-2 shadow-inner">
+                <MicRoundedIcon fontSize="medium" />
+              </div>
+              <h4 className="text-sm font-bold">Dev Standup Room</h4>
+              <p className="text-[11px] text-violet-200 mt-0.5">3 participants talking</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center gap-2">
+            <IconButton sx={{ bgcolor: "white", color: "#6d28d9", "&:hover": { bgcolor: "#f5f3ff" } }} size="small">
+              <PhoneRoundedIcon fontSize="small" />
+            </IconButton>
+            <IconButton sx={{ bgcolor: "white", color: "#6d28d9", "&:hover": { bgcolor: "#f5f3ff" } }} size="small">
+              <VideocamRoundedIcon fontSize="small" />
+            </IconButton>
+            <IconButton sx={{ bgcolor: "rgba(255,255,255,0.2)", color: "white", "&:hover": { bgcolor: "rgba(255,255,255,0.3)" } }} size="small">
+              <SettingsRoundedIcon fontSize="small" />
+            </IconButton>
+          </div>
+        </div>
+
+        {/* BENTO BOX 3: SHARED MEDIA & FILE ASSETS (4 Cols) */}
+        <div className="md:col-span-4 bg-white rounded-3xl p-5 border border-violet-100 shadow-[0_8px_30px_rgba(124,58,237,0.04)] flex flex-col justify-between space-y-4">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <InsertDriveFileRoundedIcon sx={{ color: "#7c3aed", fontSize: 20 }} />
+                <h3 className="text-xs font-black text-[#27213a] uppercase tracking-wider">Shared Documents</h3>
+              </div>
+              <IconButton size="small"><MoreHorizRoundedIcon fontSize="small" /></IconButton>
+            </div>
+
+            <div className="space-y-2.5">
+              {recentMedia.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2.5 rounded-2xl bg-[#faf9ff] border border-violet-50 flex items-center justify-between hover:border-violet-200 transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center border border-violet-100">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-[#27213a] leading-tight truncate max-w-[140px]">
+                        {item.title}
+                      </p>
+                      <p className="text-[10px] text-[#7c738f] mt-0.5">{item.size}</p>
+                    </div>
+                  </div>
+
+                  <span className="text-[10px] font-mono text-[#a8a0b4]">{item.time}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            sx={{
+              height: "40px",
+              borderRadius: "12px",
+              borderColor: "#ddd6fe",
+              color: "#6d28d9",
+              fontWeight: 700,
+              textTransform: "none",
+              fontSize: "0.8rem",
+              "&:hover": { borderColor: "#a78bfa", bgcolor: "#faf9ff" },
+            }}
+          >
+            Asset Manager
+          </Button>
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+
+
+------------------------------------------------------------------------------------------
+import React, { useState } from "react";
+import {
+  Avatar,
+  Badge,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import TagRoundedIcon from "@mui/icons-material/TagRounded";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import VolumeUpRoundedIcon from "@mui/icons-material/VolumeUpRounded";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import SentimentSatisfiedAltRoundedIcon from "@mui/icons-material/SentimentSatisfiedAltRounded";
+import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
+import PushPinRoundedIcon from "@mui/icons-material/PushPinRounded";
+import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
+import FiberManualRecordRoundedIcon from "@mui/icons-material/FiberManualRecordRounded";
+import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRounded";
+import AlternateEmailRoundedIcon from "@mui/icons-material/AlternateEmailRounded";
+
+export default function MultiPanelChatHub() {
+  const [selectedChannel, setSelectedChannel] = useState("general-discussion");
+  const [messageInput, setMessageInput] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      sender: "David Chen",
+      handle: "david_c",
+      time: "10:32 AM",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150",
+      content: "Has anyone reviewed the updated authentication schema PR?",
+    },
+    {
+      id: 2,
+      sender: "Sarah Jenkins",
+      handle: "sarah_design",
+      time: "10:35 AM",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150",
+      content: "Reviewed and approved! Contrast ratios on the purple button states look great. ✨",
+    },
+    {
+      id: 3,
+      sender: "Alex Morgan",
+      handle: "alex_m",
+      time: "10:38 AM",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250",
+      content: "Awesome, merging the branch to staging now. 🚀",
+      isMe: true,
+    },
+  ]);
+
+  const channelGroups = [
+    {
+      category: "Text Channels",
+      channels: [
+        { id: "general-discussion", name: "general-discussion", type: "public", unread: 0 },
+        { id: "frontend-dev", name: "frontend-dev", type: "public", unread: 3 },
+        { id: "core-leads", name: "core-leads", type: "private", unread: 1 },
+      ],
+    },
+    {
+      category: "Voice Lounges",
+      channels: [
+        { id: "standup-room", name: "Daily Standup", type: "voice", unread: 0, activeCount: 4 },
+        { id: "focus-room", name: "Deep Work (Silent)", type: "voice", unread: 0 },
+      ],
+    },
+  ];
+
+  const channelMembers = [
+    { id: 1, name: "David Chen", role: "Backend Architect", status: "online", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" },
+    { id: 2, name: "Sarah Jenkins", role: "UI/UX Lead", status: "online", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" },
+    { id: 3, name: "Elena Rostova", role: "Security Auditor", status: "away", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=150" },
+    { id: 4, name: "Marcus Vance", role: "DevOps Engineer", status: "offline", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150" },
+  ];
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!messageInput.trim()) return;
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        sender: "Alex Morgan",
+        handle: "alex_m",
+        time: "Just now",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250",
+        content: messageInput,
+        isMe: true,
+      },
+    ]);
+    setMessageInput("");
+  };
+
+  return (
+    <div className="h-screen bg-[#f5f3ff] p-3 sm:p-5 flex flex-col font-sans overflow-hidden">
+      
+      {/* =================================================
+          MAIN CHAT FRAMEWORK (3-COLUMN PANE)
+          ================================================= */}
+      <div className="flex-1 bg-white rounded-[28px] border border-violet-100 shadow-[0_15px_50px_rgba(124,58,237,0.06)] flex overflow-hidden">
+        
+        {/* PANE 1: CHANNELS & ROOMS DIRECTORY (w-64) */}
+        <aside className="w-64 border-r border-violet-100 bg-[#faf9ff]/80 flex flex-col justify-between hidden md:flex">
+          <div className="p-4 space-y-4 overflow-y-auto">
+            
+            {/* Header / Workspace Selector */}
+            <div className="flex items-center justify-between pb-3 border-b border-violet-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#6d28d9] to-[#9333ea] text-white flex items-center justify-center font-bold text-sm shadow-md">
+                  P
+                </div>
+                <div>
+                  <h2 className="text-xs font-black text-[#27213a] uppercase tracking-wider">Pulse Space</h2>
+                  <p className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                    <FiberManualRecordRoundedIcon sx={{ fontSize: 8 }} />
+                    24 Online
+                  </p>
+                </div>
+              </div>
+              <IconButton size="small" sx={{ color: "#7c738f" }}>
+                <AddRoundedIcon fontSize="small" />
+              </IconButton>
+            </div>
+
+            {/* Channels Accordion List */}
+            {channelGroups.map((group, idx) => (
+              <div key={idx} className="space-y-1">
+                <span className="text-[10px] font-bold text-[#a8a0b4] uppercase tracking-widest px-2 block mb-1">
+                  {group.category}
+                </span>
+
+                {group.channels.map((ch) => {
+                  const isActive = selectedChannel === ch.id;
+                  return (
+                    <button
+                      key={ch.id}
+                      onClick={() => setSelectedChannel(ch.id)}
+                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white shadow-md shadow-violet-500/20"
+                          : "text-[#7c738f] hover:bg-violet-50 hover:text-[#7c3aed]"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 truncate">
+                        {ch.type === "public" && <TagRoundedIcon sx={{ fontSize: 16 }} />}
+                        {ch.type === "private" && <LockRoundedIcon sx={{ fontSize: 14 }} />}
+                        {ch.type === "voice" && <VolumeUpRoundedIcon sx={{ fontSize: 16 }} />}
+                        <span className="truncate">{ch.name}</span>
+                      </div>
+
+                      {ch.unread > 0 && (
+                        <span
+                          className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
+                            isActive ? "bg-white text-[#7c3aed]" : "bg-[#7c3aed] text-white"
+                          }`}
+                        >
+                          {ch.unread}
+                        </span>
+                      )}
+
+                      {ch.activeCount && (
+                        <span className="text-[10px] text-emerald-500 font-mono font-bold">
+                          {ch.activeCount} active
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          {/* User Bottom Anchor */}
+          <div className="p-3 border-t border-violet-100 bg-white flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Badge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                variant="dot"
+                sx={{ "& .MuiBadge-badge": { bgcolor: "#10b981" } }}
+              >
+                <Avatar
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250"
+                  sx={{ width: 34, height: 34 }}
+                />
+              </Badge>
+              <div className="leading-tight">
+                <p className="text-xs font-bold text-[#27213a]">Alex Morgan</p>
+                <p className="text-[10px] text-[#7c738f]">alex_m</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* PANE 2: CENTRAL INTERACTIVE CHAT STREAM (flex-1) */}
+        <main className="flex-1 flex flex-col justify-between bg-white overflow-hidden">
+          
+          {/* Channel Top Header */}
+          <div className="h-16 border-b border-violet-100 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TagRoundedIcon sx={{ color: "#7c3aed" }} />
+              <div>
+                <h3 className="text-sm font-bold text-[#27213a] leading-none">{selectedChannel}</h3>
+                <p className="text-[11px] text-[#7c738f] mt-0.5">Topic: Architecture, state management, & API endpoints</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1 text-[#7c738f]">
+              <IconButton size="small"><PushPinRoundedIcon fontSize="small" /></IconButton>
+              <IconButton size="small"><NotificationsNoneRoundedIcon fontSize="small" /></IconButton>
+              <IconButton size="small"><SearchRoundedIcon fontSize="small" /></IconButton>
+            </div>
+          </div>
+
+          {/* Message Thread Scroll View */}
+          <div className="flex-1 p-6 overflow-y-auto space-y-5">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex items-start gap-3.5 ${
+                  msg.isMe ? "flex-row-reverse" : "flex-row"
+                }`}
+              >
+                <Avatar src={msg.avatar} sx={{ width: 38, height: 38, mt: 0.5 }} />
+
+                <div className={`space-y-1 max-w-lg ${msg.isMe ? "items-end text-right" : "items-start"}`}>
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="font-bold text-[#27213a]">{msg.sender}</span>
+                    <span className="text-[10px] text-[#a8a0b4] font-mono">{msg.time}</span>
+                  </div>
+
+                  <div
+                    className={`p-3.5 rounded-2xl text-xs leading-relaxed shadow-sm ${
+                      msg.isMe
+                        ? "bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white rounded-tr-xs"
+                        : "bg-[#faf9ff] text-[#27213a] border border-violet-100 rounded-tl-xs"
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Chat Input Box */}
+          <div className="p-4 border-t border-violet-100 bg-[#faf9ff]/50">
+            <form
+              onSubmit={handleSendMessage}
+              className="flex items-center gap-2 bg-white border border-violet-100 rounded-2xl p-2 shadow-sm focus-within:border-[#7c3aed] transition-colors"
+            >
+              <IconButton size="small" sx={{ color: "#7c738f" }}>
+                <AttachFileRoundedIcon fontSize="small" />
+              </IconButton>
+
+              <input
+                type="text"
+                placeholder={`Message #${selectedChannel}...`}
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+                className="flex-1 bg-transparent text-xs text-[#27213a] outline-none px-2 placeholder-[#a8a0b4]"
+              />
+
+              <IconButton size="small" sx={{ color: "#7c738f" }}>
+                <SentimentSatisfiedAltRoundedIcon fontSize="small" />
+              </IconButton>
+
+              <IconButton
+                type="submit"
+                disabled={!messageInput.trim()}
+                sx={{
+                  bgcolor: "#7c3aed",
+                  color: "white",
+                  borderRadius: "12px",
+                  "&:hover": { bgcolor: "#6d28d9" },
+                  "&.Mui-disabled": { bgcolor: "#ede9fe", color: "#a8a0b4" },
+                }}
+                size="small"
+              >
+                <SendRoundedIcon fontSize="small" />
+              </IconButton>
+            </form>
+          </div>
+        </main>
+
+        {/* PANE 3: CONTEXTUAL MEMBERS & FILES BAR (w-64) */}
+        <aside className="w-64 border-l border-violet-100 bg-[#faf9ff]/80 p-4 flex-col justify-between hidden lg:flex space-y-5 overflow-y-auto">
+          <div className="space-y-4">
+            
+            {/* Active Members Count */}
+            <div>
+              <span className="text-[10px] font-bold text-[#a8a0b4] uppercase tracking-widest block mb-2">
+                Room Members ({channelMembers.length})
+              </span>
+
+              <div className="space-y-2">
+                {channelMembers.map((m) => (
+                  <div key={m.id} className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-white transition-colors cursor-pointer">
+                    <Badge
+                      overlap="circular"
+                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                      variant="dot"
+                      sx={{
+                        "& .MuiBadge-badge": {
+                          bgcolor:
+                            m.status === "online"
+                              ? "#10b981"
+                              : m.status === "away"
+                              ? "#f59e0b"
+                              : "#94a3b8",
+                        },
+                      }}
+                    >
+                      <Avatar src={m.avatar} sx={{ width: 30, height: 30 }} />
+                    </Badge>
+                    <div className="leading-tight truncate">
+                      <p className="text-xs font-bold text-[#27213a] truncate">{m.name}</p>
+                      <p className="text-[10px] text-[#7c738f] truncate">{m.role}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Pinned Shared Files in Channel */}
+            <div className="pt-3 border-t border-violet-100">
+              <span className="text-[10px] font-bold text-[#a8a0b4] uppercase tracking-widest block mb-2">
+                Shared Files
+              </span>
+
+              <div className="space-y-2">
+                <div className="p-2 bg-white rounded-xl border border-violet-100 flex items-center gap-2 text-xs">
+                  <InsertDriveFileRoundedIcon sx={{ color: "#7c3aed", fontSize: 18 }} />
+                  <div className="truncate leading-tight">
+                    <p className="font-bold text-[#27213a] truncate">auth_schema_v2.pdf</p>
+                    <p className="text-[10px] text-[#7c738f]">2.1 MB &bull; PDF</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import SecurityRoundedIcon from "@mui/icons-material/SecurityRounded";
+import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
+import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import AlternateEmailRoundedIcon from "@mui/icons-material/AlternateEmailRounded";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
+import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
+import { toast } from "react-toastify";
+import { useLogin } from "../../hooks/useLogin";
+
+/*
+=========================================================
+LOGIN INPUT STYLES
+=========================================================
+*/
+const modernInputStyles = {
+  "& .MuiOutlinedInput-root": {
+    height: "54px",
+    backgroundColor: "#faf9ff",
+    borderRadius: "14px",
+    color: "#27213a",
+    transition: "all 0.2s ease",
+
+    "& fieldset": {
+      borderColor: "#ede9fe",
+      borderWidth: "1.5px",
+    },
+
+    "&:hover fieldset": {
+      borderColor: "#a78bfa",
+    },
+
+    "&.Mui-focused fieldset": {
+      borderColor: "#7c3aed",
+      borderWidth: "1.5px",
+    },
+
+    "&.Mui-disabled": {
+      backgroundColor: "#f5f3ff",
+      "& fieldset": {
+        borderColor: "#ede9fe",
+      },
+    },
+  },
+
+  "& .MuiInputLabel-root": {
+    color: "#7c738f",
+  },
+
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#7c3aed",
+  },
+
+  "& .MuiInputLabel-root.Mui-disabled": {
+    color: "#a8a0b4",
+  },
+
+  "& .MuiInputBase-input": {
+    color: "#27213a",
+    fontSize: "14px",
+  },
+
+  "& .MuiInputBase-input::placeholder": {
+    color: "#aaa3b5",
+    opacity: 1,
+  },
+};
+
+export default function LoginPage() {
+  const navigate = useNavigate();
+
+  /*
+  ========================================================
+  TANSTACK QUERY LOGIN MUTATION
+  ========================================================
+  */
+  const { mutate: loginUser, isPending } = useLogin();
+
+  /*
+  ========================================================
+  FORM STATE
+  ========================================================
+  */
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    login: "",
+    password: "",
+  });
+
+  /*
+  ========================================================
+  HANDLE INPUT CHANGE
+  ========================================================
+  */
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  /*
+  ========================================================
+  HANDLE LOGIN & ROUTE DECISION
+  ========================================================
+  */
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (!formData.login.trim()) {
+      toast.error("Please enter your email or phone number");
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      toast.error("Please enter your password");
+      return;
+    }
+
+    loginUser(
+      {
+        login: formData.login,
+        password: formData.password,
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.token) {
+            localStorage.setItem("token", data.token);
+          }
+          if (data?.userid) {
+            localStorage.setItem("userid", data.userid);
+          }
+          if (data?.username) {
+            localStorage.setItem("username", data.username);
+          }
+
+          toast.success("Logged-in Successfully");
+
+          // Route decision: Profile vs Dashboard
+          if (data?.profileexists) {
+            localStorage.setItem("profileid", data.profileid);
+            navigate("/dashboard");
+          } else {
+            localStorage.removeItem("profileid");
+            navigate("/Profile");
+          }
+        },
+        onError: (error) => {
+          toast.error(error?.response?.data?.message || "Login failed");
+        },
+      }
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f5f3ff] flex items-center justify-center px-4 py-8 relative overflow-hidden font-sans">
+      {/* Background Decoration */}
+      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-violet-300/25 blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-fuchsia-200/30 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-purple-200/20 blur-[100px] pointer-events-none" />
+
+      {/* Main Container */}
+      <div className="relative z-10 w-full max-w-5xl bg-white rounded-[28px] border border-violet-100 shadow-[0_25px_80px_rgba(76,29,149,0.12)] overflow-hidden flex flex-col md:flex-row">
+        
+        {/* =================================================
+            LEFT: LIVE REAL-TIME CHAT PANEL (46%)
+            ================================================= */}
+        <div className="md:w-[46%] bg-gradient-to-br from-[#6d28d9] via-[#7c3aed] to-[#9333ea] p-8 md:p-10 text-white relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute -top-28 -right-24 w-72 h-72 rounded-full bg-white/10 pointer-events-none" />
+          <div className="absolute -bottom-32 -left-24 w-80 h-80 rounded-full bg-black/5 pointer-events-none" />
+
+          <div className="relative z-10 space-y-8">
+            {/* Brand Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center">
+                  <ChatRoundedIcon sx={{ fontSize: 24, color: "#ffffff" }} />
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold">PulseChat</h1>
+                  <p className="text-violet-200 text-xs">Real-time messaging companion</p>
+                </div>
+              </div>
+
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[10px] font-mono text-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live Node
+              </span>
+            </div>
+
+            {/* Left Heading */}
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold leading-tight">
+                Your conversations <span className="block text-violet-200">are waiting.</span>
+              </h2>
+              <p className="text-violet-100 text-xs sm:text-sm leading-relaxed mt-2">
+                Sign in to join active discussions, voice lounges, and collaborative rooms with zero latency.
+              </p>
+            </div>
+
+            {/* Live Message Preview Feed */}
+            <div className="space-y-3">
+              <div className="bg-white/10 border border-white/10 rounded-2xl p-3.5 space-y-1 backdrop-blur-md">
+                <div className="flex justify-between items-center text-[10px] text-violet-200">
+                  <span className="font-bold text-white flex items-center gap-1">
+                    <ForumRoundedIcon sx={{ fontSize: 13 }} /> #general-chat
+                  </span>
+                  <span>10:45 AM</span>
+                </div>
+                <p className="text-xs text-violet-100 leading-relaxed">
+                  Realtime connection is active. All rooms are synchronized ⚡
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Security Assurance */}
+          <div className="relative z-10 pt-6 mt-6 border-t border-white/10 flex items-center justify-between text-xs text-violet-200">
+            <div className="flex items-center gap-1.5">
+              <CheckCircleRoundedIcon sx={{ fontSize: 16 }} />
+              <span>TLS End-to-End Encrypted</span>
+            </div>
+            <div className="flex items-center gap-1 text-[11px] font-mono text-emerald-300">
+              <DoneAllRoundedIcon sx={{ fontSize: 14 }} />
+              <span>Synced</span>
+            </div>
+          </div>
+        </div>
+
+        {/* =================================================
+            RIGHT: LOGIN FORM PANEL (54%)
+            ================================================= */}
+        <div className="md:w-[54%] p-7 md:p-10 flex items-center justify-center">
+          <div className="w-full max-w-md">
+            
+            {/* Form Header */}
+            <div className="mb-6">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#7c3aed] flex items-center gap-1 mb-1">
+                <AutoAwesomeRoundedIcon sx={{ fontSize: 14 }} />
+                Secure Portal
+              </span>
+              <h2 className="text-2xl font-bold text-[#29213d]">Welcome Back</h2>
+              <p className="text-[#7c738f] text-sm mt-1">
+                Fill in your details below to start chatting with your friends.
+              </p>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleLogin} className="flex flex-col gap-4">
+              {/* Login Field (Email / Phone) */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#27213a] block">
+                  Email or Phone
+                </label>
+                <TextField
+                  fullWidth
+                  placeholder="Enter email or phone number"
+                  name="login"
+                  required
+                  value={formData.login}
+                  onChange={handleChange}
+                  disabled={isPending}
+                  sx={modernInputStyles}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AlternateEmailRoundedIcon sx={{ color: "#7c3aed", fontSize: 18 }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+
+              {/* Password Field */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#27213a]">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => navigate("/forgot-password")}
+                    className="text-xs text-[#7c3aed] hover:text-[#6d28d9] font-bold cursor-pointer transition-colors"
+                  >
+                    Forgot?
+                  </button>
+                </div>
+
+                <TextField
+                  fullWidth
+                  placeholder="Enter your password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  disabled={isPending}
+                  sx={modernInputStyles}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockRoundedIcon sx={{ color: "#7c3aed", fontSize: 18 }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          type="button"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          edge="end"
+                          disabled={isPending}
+                          sx={{ color: "#9ca3af" }}
+                        >
+                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+
+              {/* Login Button */}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={isPending}
+                endIcon={!isPending ? <ArrowForwardRoundedIcon /> : null}
+                sx={{
+                  height: "50px",
+                  fontWeight: 700,
+                  textTransform: "none",
+                  borderRadius: "14px",
+                  fontSize: "0.92rem",
+                  marginTop: "6px",
+                  background: "linear-gradient(135deg, #7c3aed, #9333ea)",
+                  boxShadow: "0 8px 22px rgba(124,58,237,0.2)",
+                  "&:hover": {
+                    background: "linear-gradient(135deg, #6d28d9, #7e22ce)",
+                    boxShadow: "0 10px 28px rgba(124,58,237,0.28)",
+                  },
+                  "&.Mui-disabled": {
+                    background: "#ddd6fe",
+                    color: "#7c738f",
+                  },
+                }}
+              >
+                {isPending ? "Signing in..." : "Sign in to PulseChat"}
+              </Button>
+            </form>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-5">
+              <div className="h-px bg-violet-100 flex-1" />
+              <span className="text-[10px] font-bold tracking-wider text-[#a8a0b4] uppercase">
+                NEW TO PULSECHAT?
+              </span>
+              <div className="h-px bg-violet-100 flex-1" />
+            </div>
+
+            {/* Register Navigation Button */}
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => navigate("/register")}
+              sx={{
+                height: "46px",
+                borderRadius: "14px",
+                borderColor: "#ddd6fe",
+                color: "#6d28d9",
+                fontWeight: 700,
+                textTransform: "none",
+                fontSize: "0.85rem",
+                "&:hover": {
+                  borderColor: "#a78bfa",
+                  backgroundColor: "#faf9ff",
+                },
+              }}
+            >
+              Create a new account
+            </Button>
+
+            {/* Security Footnote */}
+            <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-[#a8a0b4]">
+              <SecurityRoundedIcon sx={{ fontSize: 14 }} />
+              <span>Encrypted Node &bull; Real-time Verified</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+------------------------------------------------------------------------------------------
+
