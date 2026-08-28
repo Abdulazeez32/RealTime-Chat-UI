@@ -18,6 +18,9 @@ import FindFriends from "../pages/FindFriends/FindFriends";
 
 import Feed from "../pages/Feed/Feed"
 import NewPost from "../pages/NewPost/NewPost";
+import EditProfile from "../pages/EditProfile/EditProfile";
+import Blocked from "../pages/Blocked/Blocked";
+import ChangePassword from "../pages/ChangePasword/ChangePassword";
 
 export default function AppRoutes() {
   return (
@@ -34,6 +37,7 @@ export default function AppRoutes() {
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/setting" element={<Setting />} />
         <Route path="/find-friend" element={<FindFriends />} />
+        <Route path="/blockusers" element={<Blocked />} />
 
         <Route path="/groups" element={<MyGroups />} />
         <Route path="/groups/create" element={<CreateGroup />} />
@@ -43,7 +47,14 @@ export default function AppRoutes() {
         
         <Route path="/feed" element={<Feed />} />
         <Route path="/new-post" element={<NewPost />} />
+        
+        
+        
+        <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/change-password" element={<ChangePassword />} />
       
+
+
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
